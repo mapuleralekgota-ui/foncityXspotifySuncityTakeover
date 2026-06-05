@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify x FonCity | Sun City Takeover 2026</title>
+  <style>
+    :root {
+      --ink: #050706;
+      --paper: #f5f7ef;
+      --muted: rgba(245, 247, 239, 0.72);
+      --line: rgba(245, 247, 239, 0.16);
+      --spotify: #1ed760;
+      --gold: #f6c85f;
+      --cyan: #55d7ff;
+      --rose: #ff4d8d;
+      --panel: rgba(255, 255, 255, 0.065);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(145deg, rgba(30,215,96,0.08), transparent 32%, rgba(85,215,255,0.06) 66%, transparent);
+      background-size: 42px 42px, 42px 42px, cover;
+      pointer-events: none;
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 5px);
+      mix-blend-mode: screen;
+      opacity: 0.28;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p { margin: 0; }
+
+    .deck {
+      width: 100%;
+      scroll-snap-type: y mandatory;
+    }
+    .slide {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 70px 72px;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .slide::before {
+      content: attr(data-index);
+      position: absolute;
+      right: 52px;
+      top: 44px;
+      color: rgba(255,255,255,0.12);
+      font-size: 5.5rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .wrap {
+      width: min(100%, var(--max));
+      position: relative;
+      z-index: 1;
+    }
+    .tight { max-width: 930px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 20px;
+      color: var(--spotify);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 2px;
+      background: currentColor;
+      display: inline-block;
+    }
+    h1 {
+      max-width: 1060px;
+      font-size: 6.15rem;
+      line-height: 0.92;
+      letter-spacing: 0;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+    h2 {
+      max-width: 980px;
+      font-size: 4.1rem;
+      line-height: 1.02;
+      letter-spacing: 0;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+    h3 {
+      font-size: 1.22rem;
+      line-height: 1.2;
+      font-weight: 850;
+    }
+    p {
+      color: var(--muted);
+      font-size: 1.16rem;
+      max-width: 760px;
+    }
+    .lead {
+      margin-top: 24px;
+      color: rgba(245, 247, 239, 0.84);
+      font-size: 1.42rem;
+      max-width: 860px;
+    }
+    .micro {
+      color: rgba(245, 247, 239, 0.56);
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+    .accent { color: var(--spotify); }
+    .gold { color: var(--gold); }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 54px;
+      align-items: center;
+    }
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 810px;
+      margin-top: 30px;
+    }
+    .meta {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius);
+      padding: 15px 16px;
+      min-height: 84px;
+    }
+    .meta b {
+      display: block;
+      color: var(--paper);
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+    .meta span {
+      display: block;
+      color: rgba(245,247,239,0.58);
+      font-size: 0.82rem;
+    }
+    .presented {
+      margin-top: 24px;
+      color: rgba(245,247,239,0.62);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .stage-visual {
+      position: relative;
+      min-height: 560px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)),
+        #070a08;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .stage-visual::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border: 1px solid rgba(30,215,96,0.32);
+      border-radius: var(--radius);
+      box-shadow: inset 0 0 45px rgba(30,215,96,0.08);
+    }
+    .stage-copy {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      top: 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      z-index: 2;
+    }
+    .stage-copy strong {
+      display: block;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+    .stage-copy span {
+      display: block;
+      color: rgba(245,247,239,0.58);
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+    .disc {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      width: 290px;
+      height: 290px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(245,247,239,0.2);
+      background:
+        repeating-radial-gradient(circle, rgba(245,247,239,0.12) 0 1px, transparent 1px 12px),
+        radial-gradient(circle at center, #111 0 11%, var(--spotify) 12% 16%, #111 17% 100%);
+      animation: spin 16s linear infinite;
+      z-index: 1;
+    }
+    .disc::after {
+      content: "FONCITY";
+      position: absolute;
+      inset: 105px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #f5f7ef;
+      color: #050706;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+    .equalizer {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 38px;
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      gap: 7px;
+      align-items: end;
+      height: 116px;
+      z-index: 3;
+    }
+    .equalizer i {
+      display: block;
+      min-height: 16px;
+      background: linear-gradient(180deg, var(--spotify), var(--gold));
+      border-radius: 3px 3px 0 0;
+      animation: bounce 1.25s ease-in-out infinite;
+      animation-delay: calc(var(--d) * 55ms);
+      opacity: 0.92;
+    }
+    .equalizer i:nth-child(3n) { background: linear-gradient(180deg, var(--cyan), var(--spotify)); }
+    .equalizer i:nth-child(5n) { background: linear-gradient(180deg, var(--rose), var(--gold)); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .card, .stat, .package {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 24px;
+      min-height: 220px;
+      box-shadow: var(--shadow);
+    }
+    .card p, .package p { font-size: .98rem; margin-top: 12px; }
+    .stat {
+      min-height: 150px;
+      box-shadow: none;
+    }
+    .stat .num {
+      color: var(--spotify);
+      display: block;
+      font-size: 2.45rem;
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+    .stat .label {
+      display: block;
+      color: rgba(245,247,239,0.74);
+      font-size: 0.98rem;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .quote {
+      border-left: 4px solid var(--spotify);
+      padding: 4px 0 4px 24px;
+      color: rgba(245,247,239,0.86);
+      font-size: 1.5rem;
+      line-height: 1.25;
+      font-weight: 800;
+      max-width: 880px;
+    }
+    .journey {
+      margin-top: 42px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255,255,255,0.045);
+    }
+    .step {
+      min-height: 250px;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
+    .step:last-child { border-right: 0; }
+    .step .time {
+      color: var(--spotify);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .step p { font-size: 0.98rem; }
+    .step::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--spotify), var(--gold), var(--cyan));
+      transform: scaleX(.4);
+      transform-origin: left;
+      transition: transform 700ms ease;
+    }
+    .slide.is-visible .step::after { transform: scaleX(1); }
+
+    .phone-layout {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 52px;
+      align-items: center;
+      margin-top: 34px;
+    }
+    .phone {
+      max-width: 370px;
+      width: 100%;
+      min-height: 610px;
+      margin: 0 auto;
+      border: 1px solid rgba(245,247,239,0.2);
+      border-radius: 38px;
+      padding: 18px;
+      background: #0a0d0b;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      width: 108px;
+      height: 24px;
+      border-radius: 0 0 15px 15px;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      background: #050706;
+      z-index: 2;
+    }
+    .phone-screen {
+      min-height: 574px;
+      border-radius: 28px;
+      padding: 34px 24px 24px;
+      background:
+        linear-gradient(180deg, rgba(30,215,96,0.38), rgba(5,7,6,0.1) 34%),
+        #121613;
+      overflow: hidden;
+    }
+    .album {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background:
+        linear-gradient(135deg, rgba(246,200,95,0.92), rgba(30,215,96,0.92) 48%, rgba(85,215,255,0.85)),
+        #222;
+      display: grid;
+      place-items: center;
+      color: #050706;
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      padding: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    }
+    .track {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      color: rgba(245,247,239,0.84);
+      font-size: 0.95rem;
+    }
+    .track b { color: rgba(245,247,239,0.95); font-size: 0.96rem; }
+    .track small {
+      display: block;
+      color: rgba(245,247,239,0.46);
+      margin-top: 2px;
+    }
+    .concept-list { display: grid; gap: 14px; }
+    .concept {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .concept .id {
+      color: #050706;
+      background: var(--spotify);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 0.9rem;
+    }
+    .concept:nth-child(2) .id { background: var(--gold); }
+    .concept:nth-child(3) .id { background: var(--cyan); }
+    .concept p { font-size: 0.98rem; margin-top: 6px; }
+
+    .package {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+      min-height: 270px;
+    }
+    .price {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: var(--spotify);
+      color: #050706;
+      font-weight: 900;
+    }
+    .price.secondary {
+      background: rgba(245,247,239,.12);
+      color: var(--paper);
+      border: 1px solid var(--line);
+    }
+    .tier-note {
+      margin-top: 22px;
+      color: rgba(245,247,239,.58);
+      font-size: .92rem;
+      max-width: 920px;
+    }
+    .closing-line {
+      margin-top: 36px;
+      color: var(--spotify);
+      font-size: 2.35rem;
+      line-height: 1.05;
+      font-weight: 900;
+      max-width: 820px;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      z-index: 10;
+    }
+    .progress__bar {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--spotify), var(--gold), var(--cyan));
+      transition: width 250ms ease;
+    }
+    .nav {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      display: grid;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+    .dot.is-active { background: var(--spotify); border-color: var(--spotify); transform: scale(1.18); }
+    .nav-btns {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    .nav-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.34);
+      color: var(--paper);
+      font-weight: 900;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.is-visible .reveal {
+      animation: revealIn 680ms ease both;
+    }
+    .slide.is-visible .reveal:nth-child(2) { animation-delay: 80ms; }
+    .slide.is-visible .reveal:nth-child(3) { animation-delay: 150ms; }
+    .slide.is-visible .reveal:nth-child(4) { animation-delay: 220ms; }
+
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes bounce {
+      0%, 100% { height: 22px; }
+      50% { height: calc(30px + var(--h) * 1px); }
+    }
+    @keyframes revealIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1060px) {
+      .slide { padding: 62px 40px; }
+      .slide::before { right: 36px; top: 34px; font-size: 4rem; }
+      h1 { font-size: 4.5rem; }
+      h2 { font-size: 3.15rem; }
+      .hero-grid, .split, .phone-layout { grid-template-columns: 1fr; }
+      .stage-visual { min-height: 440px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .journey { grid-template-columns: 1fr 1fr; }
+      .step:nth-child(2) { border-right: 0; }
+      .step:nth-child(1), .step:nth-child(2) { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 720px) {
+      .deck { scroll-snap-type: none; }
+      .slide {
+        min-height: auto;
+        padding: 72px 20px 58px;
+        scroll-snap-align: none;
+      }
+      .slide::before { display: none; }
+      h1 { font-size: 3.12rem; line-height: 0.96; }
+      h2 { font-size: 2.35rem; line-height: 1.06; }
+      .lead { font-size: 1.12rem; }
+      p { font-size: 1rem; }
+      .meta-strip, .grid, .grid.two, .journey { grid-template-columns: 1fr; }
+      .stage-visual { min-height: 360px; }
+      .disc { width: 210px; height: 210px; }
+      .disc::after { inset: 76px; font-size: 0.62rem; }
+      .equalizer { height: 78px; gap: 4px; left: 22px; right: 22px; }
+      .stage-copy { left: 22px; right: 22px; top: 22px; }
+      .quote { font-size: 1.18rem; }
+      .phone { min-height: 560px; }
+      .phone-screen { min-height: 524px; }
+      .step,
+      .step:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .step:last-child { border-bottom: 0; }
+      .nav { display: none; }
+      .nav-btns { right: 12px; bottom: 12px; }
+      .closing-line { font-size: 1.8rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+  <nav class="nav" aria-label="Slide navigation"></nav>
+  <div class="nav-btns" aria-label="Deck controls">
+    <button class="nav-btn" type="button" data-prev aria-label="Previous slide">&lt;</button>
+    <button class="nav-btn" type="button" data-next aria-label="Next slide">&gt;</button>
+  </div>
+
+  <main class="deck">
+    <section class="slide" data-index="01">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow reveal">Partnership Visualiser</div>
+          <h1 class="reveal">Spotify x <span class="accent">FonCity</span></h1>
+          <p class="lead reveal">The music discovery layer for the Sunday night FonCity finale at HCE's Sun City Takeover 2026.</p>
+          <div class="meta-strip reveal">
+            <div class="meta"><b>FonCity focus</b><span>Sunday 8 Nov 2026, 19:00-02:00</span></div>
+            <div class="meta"><b>Venue context</b><span>Sun City Resort, North West</span></div>
+            <div class="meta"><b>Partnership lane</b><span>Official music discovery partner</span></div>
+          </div>
+          <div class="presented reveal">Presented by Impacta</div>
+        </div>
+        <div class="stage-visual reveal" aria-label="Animated FonCity music visual">
+          <div class="stage-copy">
+            <div><strong>Sun City Super Bowl</strong><span>FonCity as the finale moment</span></div>
+            <div><strong>Press Play</strong><span>Before, during, after</span></div>
+          </div>
+          <div class="disc"></div>
+          <div class="equalizer" aria-hidden="true">
+            <i style="--d:1;--h:42"></i><i style="--d:2;--h:78"></i><i style="--d:3;--h:30"></i><i style="--d:4;--h:92"></i>
+            <i style="--d:5;--h:54"></i><i style="--d:6;--h:104"></i><i style="--d:7;--h:68"></i><i style="--d:8;--h:36"></i>
+            <i style="--d:9;--h:86"></i><i style="--d:10;--h:58"></i><i style="--d:11;--h:98"></i><i style="--d:12;--h:46"></i>
+            <i style="--d:13;--h:72"></i><i style="--d:14;--h:40"></i><i style="--d:15;--h:88"></i><i style="--d:16;--h:60"></i>
+            <i style="--d:17;--h:108"></i><i style="--d:18;--h:52"></i><i style="--d:19;--h:82"></i><i style="--d:20;--h:64"></i>
+            <i style="--d:21;--h:38"></i><i style="--d:22;--h:96"></i><i style="--d:23;--h:70"></i><i style="--d:24;--h:48"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="02">
+      <div class="wrap">
+        <div class="eyebrow reveal">The Event</div>
+        <h2 class="reveal">Sun City Takeover is a high-demand destination lifestyle weekend.</h2>
+        <p class="lead reveal">Across four days, HCE brings music, nightlife, fashion, travel, wellness, creator culture and premium social experiences into one resort-wide cultural property.</p>
+        <div class="grid reveal">
+          <div class="stat"><span class="num">6-9 Nov</span><span class="label">Sun City Takeover 2026 event window.</span></div>
+          <div class="stat"><span class="num">3,500</span><span class="label">Projected patrons across the weekend.</span></div>
+          <div class="stat"><span class="num">23-45</span><span class="label">Target consumer age range.</span></div>
+          <div class="stat"><span class="num">4 days</span><span class="label">Multiple touchpoints before the finale.</span></div>
+          <div class="stat"><span class="num">Sun City</span><span class="label">A premium resort setting in North West.</span></div>
+          <div class="stat"><span class="num">Sold-out</span><span class="label">Past demand shows strong audience pull.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="03">
+      <div class="wrap split">
+        <div>
+          <div class="eyebrow reveal">What FonCity Is</div>
+          <h2 class="reveal">The Sunday night finale where the weekend reaches peak energy.</h2>
+        </div>
+        <div>
+          <div class="quote reveal">FonCity is the moment guests are building toward: music, nightlife, social currency and culture landing in one final high-energy room.</div>
+          <p class="lead reveal">For Spotify, that means the partnership has a natural reason to exist. The platform can help shape the sound before, during and after the finale.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="04">
+      <div class="wrap">
+        <div class="eyebrow reveal">Why Spotify</div>
+        <h2 class="reveal">Spotify belongs here because the event is already built around music discovery.</h2>
+        <p class="lead reveal">FonCity gives Spotify a live cultural surface: artists, DJs, creators and audiences all interacting around the soundtrack of a destination weekend.</p>
+        <div class="grid reveal">
+          <div class="card"><h3>Music Discovery</h3><p>Spotify can turn the event journey into a playlist-led discovery experience.</p></div>
+          <div class="card"><h3>Creator Culture</h3><p>The audience is social-first, style-aware and already primed to share moments from the weekend.</p></div>
+          <div class="card"><h3>Artist Relevance</h3><p>The partnership can support performers and DJs through artist picks, short-form content and event storytelling.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="05">
+      <div class="wrap">
+        <div class="eyebrow reveal">Big Idea</div>
+        <h2 class="reveal">Press Play on FonCity.</h2>
+        <p class="lead reveal">Spotify becomes the layer that helps guests find the sound before the finale, unlock the room on-site, and replay the memory after the weekend.</p>
+        <div class="journey reveal">
+          <div class="step"><div class="time">Pre-event</div><h3>The Warm-Up</h3><p>Official playlist, artist picks and short teasers that build anticipation.</p></div>
+          <div class="step"><div class="time">Arrival</div><h3>The First Scan</h3><p>QR access through guest comms and on-site placements.</p></div>
+          <div class="step"><div class="time">FonCity Night</div><h3>The Live Layer</h3><p>Creator prompts, artist listening rituals and Spotify-green capture points.</p></div>
+          <div class="step"><div class="time">Post-event</div><h3>The Replay</h3><p>A recap playlist and content series that keeps the weekend alive.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="06">
+      <div class="wrap phone-layout">
+        <div class="phone reveal" aria-label="Spotify playlist concept">
+          <div class="phone-screen">
+            <div class="album">FONCITY<br />SOUNDTRACK</div>
+            <div class="track"><span>01</span><div><b>Road to Sun City</b><small>pre-event anticipation</small></div><span>3:12</span></div>
+            <div class="track"><span>02</span><div><b>Resort Check-In</b><small>arrival energy</small></div><span>2:48</span></div>
+            <div class="track"><span>03</span><div><b>FonCity Heat</b><small>Sunday finale</small></div><span>4:05</span></div>
+            <div class="track"><span>04</span><div><b>Artist Picks</b><small>performer selections</small></div><span>3:36</span></div>
+            <div class="track"><span>05</span><div><b>After The Drop</b><small>post-event replay</small></div><span>3:58</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow reveal">Playlist Architecture</div>
+          <h2 class="reveal">Make the playlist feel like an event utility, not a logo placement.</h2>
+          <div class="concept-list reveal">
+            <div class="concept"><div class="id">A</div><div><h3>One hero playlist</h3><p>FonCity: The Weekend Soundtrack as the central destination for guests.</p></div></div>
+            <div class="concept"><div class="id">B</div><div><h3>Curated chapters</h3><p>Road to Sun City, Arrival Energy, FonCity Heat, Artist Picks and After The Drop.</p></div></div>
+            <div class="concept"><div class="id">C</div><div><h3>Artist-led credibility</h3><p>Feature performers, DJs and creator music picks through prompts and playlist updates.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="07">
+      <div class="wrap">
+        <div class="eyebrow reveal">How Spotify Shows Up</div>
+        <h2 class="reveal">Simple, useful and social-first.</h2>
+        <div class="grid reveal">
+          <div class="card"><h3>Official Music Discovery Partner</h3><p>Own the FonCity sound layer: hero playlist, artist picks, creator prompts and recap content.</p></div>
+          <div class="card"><h3>QR Music Moments</h3><p>Scannable Spotify entries in guest comms, partner comms, venue touchpoints and creator content.</p></div>
+          <div class="card"><h3>Spotify Green Capture</h3><p>A visual corner built for quick clips, playlist scans and artist listening rituals.</p></div>
+          <div class="card"><h3>Artist Spotlight</h3><p>Give selected emerging or featured artists a playlist and short-form content moment around the finale.</p></div>
+          <div class="card"><h3>Creator Prompts</h3><p>Quick-format questions built for TikTok, Reels and recap edits.</p></div>
+          <div class="card"><h3>After The Drop</h3><p>Post-event playlist refresh and content recap while the weekend is still hot.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="08">
+      <div class="wrap">
+        <div class="eyebrow reveal">Sponsor Tiers</div>
+        <h2 class="reveal">The sponsorship options.</h2>
+        <p class="lead reveal">The recommended Spotify route is the Activation Sponsor tier. It gives enough presence to own the music discovery layer without needing a full festival naming-rights buy-in.</p>
+        <div class="grid reveal">
+          <div class="package">
+            <div><h3>Recommended: Activation Sponsor</h3><p>Multi-location engagement rights adapted for Spotify through playlists, QR music moments, creator capture and on-site discovery.</p></div>
+            <span class="price">R800,000</span>
+          </div>
+          <div class="package">
+            <div><h3>Welcome Pack Sponsor</h3><p>Direct-to-hand insert or QR card driving guests into the official FonCity soundtrack from arrival.</p></div>
+            <span class="price secondary">R350,000</span>
+          </div>
+          <div class="package">
+            <div><h3>Run & Padel Naming</h3><p>Morning movement playlist and Spotify QR layer around the wellness touchpoint before the nightlife build.</p></div>
+            <span class="price secondary">R400,000</span>
+          </div>
+          <div class="package">
+            <div><h3>Run & Padel Shared Activation</h3><p>Tactical presence within the morning wellness hub without full naming rights.</p></div>
+            <span class="price secondary">R200,000</span>
+          </div>
+          <div class="package">
+            <div><h3>Day Club Naming Rights</h3><p>Premium resort footprint and ownership of one day-club environment.</p></div>
+            <span class="price secondary">R2,500,000</span>
+          </div>
+          <div class="package">
+            <div><h3>Day Club + Pouring Rights</h3><p>A high-end bundle for brands seeking deeper daytime ownership and pouring integration.</p></div>
+            <span class="price secondary">R3,000,000</span>
+          </div>
+        </div>
+        <p class="tier-note reveal">Recommendation: lead with the R800,000 Activation Sponsor route, with Welcome Pack or Run & Padel as optional add-ons if Spotify wants more touchpoints.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-index="09">
+      <div class="wrap split">
+        <div>
+          <div class="eyebrow reveal">What Spotify Gets</div>
+          <h2 class="reveal">A useful role, not background branding.</h2>
+        </div>
+        <div>
+          <div class="quote reveal">The strongest partnership is not "Spotify is present." It is "Spotify helped me experience FonCity better."</div>
+          <div class="grid two reveal">
+            <div class="card"><h3>Audience Action</h3><p>Scan, save, listen, follow, share and replay.</p></div>
+            <div class="card"><h3>Content Output</h3><p>Artist clips, creator prompts, playlist assets and recap edits.</p></div>
+            <div class="card"><h3>Cultural Proximity</h3><p>Direct association with a premium South African destination lifestyle property.</p></div>
+            <div class="card"><h3>Measurable Touchpoints</h3><p>QR engagement, playlist activity and social content performance.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-index="10">
+      <div class="wrap tight">
+        <div class="eyebrow reveal">Close</div>
+        <h2 class="reveal">FonCity already has the crowd. Spotify can give it the soundtrack.</h2>
+        <p class="lead reveal">The opportunity is to turn the Sunday night finale into something guests can hear before they arrive, unlock while they are there, and replay after they leave Sun City.</p>
+        <div class="closing-line reveal">Let's make FonCity sound as big as it feels.</div>
+        <div class="presented reveal">Presented by Impacta</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const nav = document.querySelector(".nav");
+    const progress = document.querySelector(".progress__bar");
+    let activeIndex = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement("button");
+      dot.className = "dot";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
+      dot.addEventListener("click", () => goTo(index));
+      nav.appendChild(dot);
+    });
+
+    const dots = Array.from(document.querySelectorAll(".dot"));
+
+    function setActive(index) {
+      activeIndex = index;
+      slides.forEach((slide, i) => slide.classList.toggle("is-visible", i === index));
+      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      document.title = `Spotify x FonCity | Slide ${index + 1} of ${slides.length}`;
+    }
+
+    function goTo(index) {
+      const next = Math.max(0, Math.min(slides.length - 1, index));
+      slides[next].scrollIntoView({ behavior: "smooth", block: "start" });
+      setActive(next);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(slides.indexOf(entry.target));
+      });
+    }, { threshold: 0.38 });
+
+    slides.forEach((slide) => observer.observe(slide));
+    document.querySelector("[data-next]").addEventListener("click", () => goTo(activeIndex + 1));
+    document.querySelector("[data-prev]").addEventListener("click", () => goTo(activeIndex - 1));
+
+    document.addEventListener("keydown", (event) => {
+      const nextKeys = ["ArrowDown", "ArrowRight", "PageDown", " "];
+      const prevKeys = ["ArrowUp", "ArrowLeft", "PageUp"];
+      if (nextKeys.includes(event.key)) {
+        event.preventDefault();
+        goTo(activeIndex + 1);
+      }
+      if (prevKeys.includes(event.key)) {
+        event.preventDefault();
+        goTo(activeIndex - 1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        goTo(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        goTo(slides.length - 1);
+      }
+    });
+
+    setActive(0);
+  </script>
+</body>
+</html>
